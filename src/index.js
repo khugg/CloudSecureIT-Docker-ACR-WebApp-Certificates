@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   res.json("Welcome to the API");
 });
 
-
+//create a user
 app.get('/api/users', async (req, res) => {
   try {
     const newUser = await user.find(req.body); // Fixed variable naming
@@ -33,7 +33,7 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-
+// get user by id
 app.get('/api/user/:id', async (req, res) => {
   try {
     const newUser = await user.findById(req.params.id); // Fixed variable naming
@@ -48,12 +48,12 @@ app.get('/api/user/:id', async (req, res) => {
 //update a user
 app.put('/api/user/:id', async (req, res) => {
   try {
-    const User = await user.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Fixed variable naming  
-    if (!User) {
+    const updatedUser = await user.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Fixed variable naming  
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    const updatedUser = await User.findById();
-    res.status(201).json({ user: updatedUser });
+
+    res.status(201).json({ message: 'User create successfully' });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -61,6 +61,25 @@ app.put('/api/user/:id', async (req, res) => {
 });
 
 
+
+//delete a user 
+
+app.delete('/api/user/:id', async (req, res) => {
+  try {
+    const deletedUser = await user.findByIdAndDelete(req.params.id); // Fixed variable naming
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(201).json({message: 'user delete successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+//post a user
 app.post('/api/users', async (req, res) => {
   try {
     const newUser = await user.create(req.body); // Fixed variable naming
