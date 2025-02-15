@@ -10,10 +10,17 @@ const mongoose = require('mongoose');
  const user = require('./models/user.js');
  const app = express();
 
+// Middleware
+ app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//routes
+app.use('/api/users', require('./Routers/users.js'));
+
+
 
 
 app.use(cors());
-app.use(express.json());
 app.use(cookoieParser());
 app.use(helmet());
 
@@ -34,7 +41,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // get user by id
-app.get('/api/user/:id', async (req, res) => {
+app.get('/api/users/:id', async (req, res) => {
   try {
     const newUser = await user.findById(req.params.id); // Fixed variable naming
     res.status(201).json({ user: newUser });
@@ -46,7 +53,7 @@ app.get('/api/user/:id', async (req, res) => {
 
 
 //update a user
-app.put('/api/user/:id', async (req, res) => {
+app.put('/api/users/:id', async (req, res) => {
   try {
     const updatedUser = await user.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Fixed variable naming  
     if (!user) {
@@ -64,7 +71,7 @@ app.put('/api/user/:id', async (req, res) => {
 
 //delete a user 
 
-app.delete('/api/user/:id', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   try {
     const deletedUser = await user.findByIdAndDelete(req.params.id); // Fixed variable naming
     if (!user) {
@@ -79,7 +86,7 @@ app.delete('/api/user/:id', async (req, res) => {
 });
 
 
-//post a user
+//create a user
 app.post('/api/users', async (req, res) => {
   try {
     const newUser = await user.create(req.body); // Fixed variable naming
@@ -111,15 +118,7 @@ const port = process.env.PORT || 5000;
 
 
 
-
-
-
-
-
-
-
-
-   const users = require('./Routers/users');
+   const users = require('./Routers/users.js');
    app.use('/users', users);
 
    const authRoutes = require('./Routers/auth');
