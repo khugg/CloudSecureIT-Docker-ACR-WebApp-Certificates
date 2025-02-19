@@ -6,6 +6,7 @@ const cors = require('cors');
 const cookoieParser = require('cookie-parser');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+const usersRoute = require('./Routers/users.routes.js');
  require("dotenv").config();
  const user = require('./models/user.js');
  const app = express();
@@ -15,7 +16,7 @@ const mongoose = require('mongoose');
 app.use(express.urlencoded({ extended: true }));
 
 //routes
-app.use('/api/users', require('./Routers/users.js'));
+app.use('/api/users', usersRoute);
 
 
 
@@ -118,7 +119,7 @@ const port = process.env.PORT || 5000;
 
 
 
-   const users = require('./Routers/users.js');
+   const users = require('./Routers/users.routes.js');
    app.use('/users', users);
 
    const authRoutes = require('./Routers/auth');
