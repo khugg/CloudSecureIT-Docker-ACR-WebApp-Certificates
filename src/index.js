@@ -10,20 +10,22 @@ const usersRoute = require('./Routers/users.routes.js');
  require("dotenv").config();
  const user = require('./models/user.js');
  const app = express();
+ const passport = require('passport');
 
 // Middleware
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-//routes
-app.use('/api/users', usersRoute);
-
-
-
-
 app.use(cors());
 app.use(cookoieParser());
 app.use(helmet());
+app.use(passport.initialize());
+
+//routes
+app.use('/api/users', usersRoute);
+app.use('/api/auth', require('./Routers/auth'));
+app.use('/api/upload', require('./Routers/upload'));
+
+
 
 
 
@@ -31,74 +33,10 @@ app.get('/', (req, res) => {
   res.json("Welcome to the API");
 });
 
-//create a user
-app.get('/api/users', async (req, res) => {
-  try {
-    const newUser = await user.find(req.body); // Fixed variable naming
-    res.status(201).json({ user: newUser });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// get user by id
-app.get('/api/users/:id', async (req, res) => {
-  try {
-    const newUser = await user.findById(req.params.id); // Fixed variable naming
-    res.status(201).json({ user: newUser });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});  
-  
-
-
-//update a user
-app.put('/api/users/:id', async (req, res) => {
-  try {
-    const updatedUser = await user.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Fixed variable naming  
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(201).json({ message: 'User create successfully' });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 
 
-//delete a user 
-
-app.delete('/api/users/:id', async (req, res) => {
-  try {
-    const deletedUser = await user.findByIdAndDelete(req.params.id); // Fixed variable naming
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(201).json({message: 'user delete successfully' });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-
-//create a user
-app.post('/api/users', async (req, res) => {
-  try {
-    const newUser = await user.create(req.body); // Fixed variable naming
-    res.status(201).json({ user: newUser });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-
-
+// Connect to database
 
 mongoose.connect("mongodb+srv://kemshuggs:Mypassword2025@backenddb.ffddu.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendDB")
   .then(() => {

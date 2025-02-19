@@ -1,1 +1,6 @@
-// File download routes
+// Authentication routes
+const express = require('express');
+const router = express.Router();
+
+
+module.exports = router;

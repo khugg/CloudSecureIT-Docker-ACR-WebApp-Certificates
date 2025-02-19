@@ -1,6 +1,8 @@
 // Authentication routes
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const { register, login } = require('../controllers/authController');
 
 // Route d'inscription
