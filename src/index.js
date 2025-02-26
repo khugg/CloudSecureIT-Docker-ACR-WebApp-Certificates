@@ -3,22 +3,32 @@
 
 const express = require('express');
 const cors = require('cors');
-const cookoieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const usersRoute = require('./Routers/users.routes.js');
- require("dotenv").config();
  const user = require('./models/user.js');
  const app = express();
  const passport = require('passport');
+const dotenv = require('dotenv');
+dotenv.config();
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const bodyParser = require('body-parser');
+
+
+
+
 
 // Middleware
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(cookoieParser());
+app.use(cookieParser());
 app.use(helmet());
 app.use(passport.initialize());
+app.use(express.static('public'));
 
 //routes
 app.use('/api/users', usersRoute);
@@ -32,8 +42,6 @@ app.use('/api/upload', require('./Routers/upload'));
 app.get('/', (req, res) => {
   res.json("Welcome to the API");
 });
-
-
 
 
 // Connect to database
@@ -53,17 +61,12 @@ mongoose.connect("mongodb+srv://kemshuggs:Mypassword2025@backenddb.ffddu.mongodb
 const port = process.env.PORT || 5000;
   
 
-
-
-
-
    const users = require('./Routers/users.routes.js');
    app.use('/users', users);
 
    const authRoutes = require('./Routers/auth');
    app.use('/auth', authRoutes);
   
-   const uplaodRoutes = require('./Routers/auth');
-   app.use('/uplaod', uplaodRoutes);
-
+   const uploadRoutes = require('./Routers/auth');
+   app.use('/upload', uploadRoutes);
 
