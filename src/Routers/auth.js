@@ -3,15 +3,19 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { register, login } = require('../controllers/authController');
+const { register, login,generateToken } = require('../controllers/authController.js');
+const user = require('../models/user');
 
-// Route d'inscription
-router.post('/register', (req, res) => {
-    res.json('');
-  });
 
-// Route de connexion
-router.get('/login', (req, res) => {
-    res.json('List of Login POST request received users');
-  });
+// Register a user
+router.post('/register', register);
+
+// Login a user
+router.post('/login', login);
+
+// Generate a token
+
+router.post('/token', (req, res) => generateToken(req, res));
+
+
 module.exports = router;
